@@ -20,7 +20,9 @@ def execute(connection, query):
 def get_student_schedule(student_id):
     query = f"CALL GetSchedule('{student_id}')"
     return execute(connectToDatabase(), query)
-
+def get_grades(student_id, course_id):
+    query = f"CALL GetGrades('{student_id, course_id}')"
+    return execute(connectToDatabase(), query)
 def get_teacher_schedule(teacher_id):
     query = f"CALL GetTeacherSchedule('{teacher_id}')"
     return execute(connectToDatabase(), query)
