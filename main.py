@@ -1,5 +1,5 @@
 import mysql.connector
-
+isTeacher=False
 def connectToDatabase():
     connection = mysql.connector.connect(user='emilm24',
                                          password='247075393',
@@ -18,12 +18,14 @@ def execute(connection, query):
     return results
 
 def get_student_schedule(student_id):
+    isTeacher=False
     query = f"CALL GetSchedule('{student_id}')"
     return execute(connectToDatabase(), query)
 def get_grades(student_id, course_id):
     query = f"CALL GetGrades('{student_id, course_id}')"
     return execute(connectToDatabase(), query)
 def get_teacher_schedule(teacher_id):
+    isTeacher = True
     query = f"CALL GetTeacherSchedule('{teacher_id}')"
     return execute(connectToDatabase(), query)
 
@@ -37,13 +39,25 @@ elif role.lower()=="teacher":
     results = get_teacher_schedule(teacher_id)
 else:
     print("Invalid input.")
-for result in results:
-    class_name=str(result[0])
-    room=str(result[1])
-    period=str(result[2])
-    teacher=str(result[3])
-    print("Period: " + period)
-    print("Course:" + class_name)
-    print("Room:" + room)
-    print("Teacher:" + teacher)
-    print()
+if isTeacher:
+    for result in results:
+        class_name = str(result[1])
+        room = str(result[0])
+        period = str(result[2])
+        teacher = str(result[3])
+        print("Period: " + period)
+        print("Course:" + class_name)
+        print("Room:" + room)
+        print("Department:" + teacher)
+        print()
+else:
+    for result in results:
+        class_name = str(result[0])
+        room = str(result[1])
+        period = str(result[2])
+        teacher = str(result[3])
+        print("Period: " + period)
+        print("Course:" + class_name)
+        print("Room:" + room)
+        print("Teacher:" + teacher)
+        print()
