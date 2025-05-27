@@ -1,6 +1,5 @@
 import mysql.connector
-isTeacher=False
-getSchedule=False
+isTeacher=True
 grades=False
 def connectToDatabase():
     connection = mysql.connector.connect(user='emilm24',
@@ -20,18 +19,16 @@ def execute(connection, query):
     return results
 
 def get_student_schedule(student_id):
-    #getSchedule = True
     isTeacher=False
-    query = f"CALL GetSchedule('{student_id}')"
+    query = f"CALL GetSchedule('{student_id}');"
     return execute(connectToDatabase(), query)
 def get_grades(student_id, course_id):
     grades=True
-    query = f"CALL GetGrades('{student_id, course_id}')"
+    query = f"CALL GetGrades('{student_id, course_id}');"
     return execute(connectToDatabase(), query)
 def get_teacher_schedule(teacher_id):
-    #getSchedule=True
     isTeacher = True
-    query = f"CALL GetTeacherSchedule('{teacher_id}')"
+    query = f"CALL GetTeacherSchedule('{teacher_id}');"
     return execute(connectToDatabase(), query)
 
 results=[]
@@ -44,38 +41,22 @@ if role.lower()=="student":
     if action == "g":
         course_id = input("Enter a specific course section id: ")
         results = get_grades(student_id, course_id)
-elif role.lower()=="teacher":
-    teacher_id = input("Enter a teacher id: ")
-    results = get_teacher_schedule(teacher_id)
 else:
-    print("Invalid input.")
-#if getSchedule:
-    if isTeacher:
-        for result in results:
-            class_name = str(result[1])
-            room = str(result[0])
-            period = str(result[2])
-            teacher = str(result[3])
-            print("Period: " + period)
-            print("Course:" + class_name)
-            print("Room:" + room)
-            print("Department:" + teacher)
-            print()
-    else:
-        for result in results:
-            class_name = str(result[1])
-            room = str(result[3])
-            period = str(result[2])
-            teacher = str(result[4])
-            id = str(result[0])
-            print("Period: " + period)
-            print("Course:" + class_name)
-            print("Room:" + room)
-            print("Teacher:" + teacher)
-            print("Id:" + id)
-            print()
-'''
-if grades:
+    if role.lower()=="teacher":
+        teacher_id = input("Enter a teacher id: ")
+        results = get_teacher_schedule(teacher_id)
+def teacher_operation():
+    for result in results:
+        class_name = str(result[1])
+        room = str(result[0])
+        period = str(result[2])
+        teacher = str(result[3])
+        print("Period: " + period)
+        print("Course:" + class_name)
+        print("Room:" + room)
+        print("Department:" + teacher)
+        print()
+def student_operation():
     for result in results:
         class_name = str(result[1])
         room = str(result[3])
@@ -88,4 +69,7 @@ if grades:
         print("Teacher:" + teacher)
         print("Id:" + id)
         print()
-'''
+if isTeacher:
+    teacher_operation()
+else:
+    student_operation()
